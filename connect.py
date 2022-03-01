@@ -1,16 +1,12 @@
 #!/usr/bin/python3
 import sys
-import serial
-with serial.Serial( port='/dev/ttyUSB0', 
-                    baudrate=9600,
-                    parity=serial.PARITY_NONE,
-                    stopbits=serial.STOPBITS_ONE,
-                    bytesize=serial.EIGHTBITS,
-                    timeout=1) as ser:
-    ser.write(b'Kx')
-    resp = ser.read(2)
-    if resp == b'x#':
-        sys.exit(0)
+from teletrak import *
 
-sys.exit(1)
+logger.debug("%s", *sys.argv)
+logger.setLevel(logging.INFO)
+with init() as ser:
+    if not is_alive(ser):
+        sys.exit(1)
+
+sys.exit(0)
 
